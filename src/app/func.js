@@ -47,6 +47,23 @@ const _handle = function (input, ctx) {
         if (!componentName) {
             throw new Error("The component name is missing from the header " + BOTS_FN_PATH_HEADER + ": " + botsFnPath);
         }
+        if( "restServiceContext" in input ) { 
+              var restServiceContext = input.restServiceContext;
+              if( restServiceContext.restServiceType == "LLM" ) { 
+                return new Promise((resolve) => {
+                     // Transformation Handler
+                    let callback = (err, data) => {
+                        if (!err) {
+                            resolve(data);
+                        } else {
+                            console.log("Component invocation failed", err.stack);
+                            throw err;
+                        }
+                    };
+                    shell.invokeLlmTransformationHandler(componentName, input, callback, {logger: () => console});
+                });
+            }
+        }
         return new Promise((resolve) => {
             let callback = (err, data) => {
                 if (!err) {
@@ -57,7 +74,7 @@ const _handle = function (input, ctx) {
                 }
             };
             shell.invokeComponentByName(componentName, input, {logger: () => console}, callback);
-            });
+        });
     }
 };
  
@@ -69,3 +86,12 @@ fdk.handle(function (input, ctx) {
         throw err;
     }
 });
+
+
+/**
+ * Invoke rest service event handlers
+ * @param {LlmTransformationHandler} component - component instance
+ * @param {LlmTransformationContext} context - context derived for this invocation
+ * @private
+ */
+function invokeLlmTransformationHandlers(component, context) {
