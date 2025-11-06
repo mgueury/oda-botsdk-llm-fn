@@ -76,6 +76,7 @@ resource "oci_apigateway_deployment" "starter_apigw_deployment" {
       backend {
         type = "STOCK_RESPONSE_BACKEND"
         url    = "NO URL - SEE FUNCTION_PART2 ERROR RESPONSE"
+        status = 200
       }
     }
   }
