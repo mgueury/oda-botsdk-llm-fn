@@ -35,6 +35,9 @@ if (componentsRegistry && componentsRegistry.getComponents().size > 0) {
  
 const _handle = function (input, ctx) {
     let botsFnPath = ctx.getHeader(BOTS_FN_PATH_HEADER);
+    console.log("input" + JSON.stringify(input));
+    console.log("ctx" + JSON.stringify(ctx));
+    console.log("botsFnPath" + JSON.stringify(botsFnPath));
     if (!botsFnPath) {
         throw new Error("Missing required header " +  BOTS_FN_PATH_HEADER);
     } else if (botsFnPath === METADATA_PATH) {
