@@ -87,11 +87,3 @@ fdk.handle(function (input, ctx) {
     }
 });
 
-
-/**
- * Invoke rest service event handlers
- * @param {LlmTransformationHandler} component - component instance
- * @param {LlmTransformationContext} context - context derived for this invocation
- * @private
- */
-function invokeLlmTransformationHandlers(component, context) {
