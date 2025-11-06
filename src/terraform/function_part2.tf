@@ -43,7 +43,7 @@ resource "oci_apigateway_deployment" "starter_apigw_deployment" {
       }
     }
     routes {
-      path    = "/app/dept"
+      path    = "/app/dept/{pathname*}"
       methods = [ "ANY" ]
       backend {
         type = "ORACLE_FUNCTIONS_BACKEND"
@@ -74,8 +74,8 @@ resource "oci_apigateway_deployment" "starter_apigw_deployment" {
       path    = "/{pathname*}"
       methods = [ "ANY" ]
       backend {
-        type = "HTTP_BACKEND"
-        url    = "${local.bucket_url}/$${request.path[pathname]}"
+        type = "STOCK_RESPONSE_BACKEND"
+        url    = "NO URL - SEE FUNCTION_PART2 ERROR RESPONSE"
       }
     }
   }
