@@ -51,26 +51,6 @@ resource "oci_apigateway_deployment" "starter_apigw_deployment" {
       }
     }    
     routes {
-      path    = "/app/info"
-      methods = [ "ANY" ]
-      backend {
-        type = "STOCK_RESPONSE_BACKEND"
-        body   = "Function node"
-        status = 200
-      }
-    }    
-    routes {
-      path    = "/"
-      methods = [ "ANY" ]
-      backend {
-        type = "HTTP_BACKEND"
-        url    = "${local.bucket_url}/index.html"
-        connect_timeout_in_seconds = 10
-        read_timeout_in_seconds = 30
-        send_timeout_in_seconds = 30
-      }
-    }    
-    routes {
       path    = "/{pathname*}"
       methods = [ "ANY" ]
       backend {

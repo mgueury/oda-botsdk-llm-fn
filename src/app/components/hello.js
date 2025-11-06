@@ -4,15 +4,12 @@ module.exports = {
 
   metadata: {
     name: 'helloWorld',
-    properties: {
-      human: { required: true, type: 'string' }
-    },
     supportedActions: ['weekday', 'weekend']
   },
 
   invoke: async(context) => {
     // Retrieve the value of the 'human' component property.
-    const { human } = context.properties();
+    const { human } = "World";
     // determine date
     const now = new Date();
     const dayOfWeek = now.toLocaleDateString('en-US', { weekday: 'long' });
