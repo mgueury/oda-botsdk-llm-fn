@@ -35,9 +35,9 @@ if (componentsRegistry && componentsRegistry.getComponents().size > 0) {
  
 const _handle = function (input, ctx) {
     let botsFnPath = ctx.getHeader(BOTS_FN_PATH_HEADER);
-    console.log("input=" + JSON.stringify(input));
-    console.log("ctx=" + JSON.stringify(ctx));
-    console.log("botsFnPath=" + JSON.stringify(botsFnPath));
+    // console.log("input=" + JSON.stringify(input));
+    // console.log("ctx=" + JSON.stringify(ctx));
+    // console.log("botsFnPath=" + JSON.stringify(botsFnPath));
     if (!botsFnPath) {
         throw new Error("Missing required header " +  BOTS_FN_PATH_HEADER);
     } else if (botsFnPath === METADATA_PATH) {
@@ -46,23 +46,6 @@ const _handle = function (input, ctx) {
         let componentName = botsFnPath.substring(COMPONENT_PREFIX.length);
         if (!componentName) {
             throw new Error("The component name is missing from the header " + BOTS_FN_PATH_HEADER + ": " + botsFnPath);
-        }
-        if( "restServiceContext" in input ) { 
-              var restServiceContext = input.restServiceContext;
-              if( restServiceContext.restServiceType == "LLM" ) { 
-                return new Promise((resolve) => {
-                     // Transformation Handler
-                    let callback = (err, data) => {
-                        if (!err) {
-                            resolve(data);
-                        } else {
-                            console.log("Component invocation failed", err.stack);
-                            throw err;
-                        }
-                    };
-                    shell.invokeLlmTransformationHandler(componentName, input, callback, {logger: () => console});
-                });
-            }
         }
         return new Promise((resolve) => {
             let callback = (err, data) => {
@@ -73,7 +56,11 @@ const _handle = function (input, ctx) {
                     throw err;
                 }
             };
-            shell.invokeComponentByName(componentName, input, {logger: () => console}, callback);
+            if( "restServiceContext" in input && input.restServiceContext.restServiceType == "LLM" ) {
+              shell.invokeLlmTransformationHandler(componentName, input, callback, {logger: () => console});
+            } else {
+              shell.invokeComponentByName(componentName, input, {logger: () => console}, callback);
+            }
         });
     }
 };
